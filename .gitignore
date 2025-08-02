@@ -1,0 +1,29 @@
+# IDE和编辑器文件
+.vscode/
+.vs/
+*.code-workspace
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.vcxproj.filters
+
+# 本地配置文件
+*.local
+local.properties
+
+# 构建输出目录
+build/
+
+# 临时上传目录
+temp/
+doc_temp/
+
+# 日志文件
+log/
+test/
+
+# GitHub Actions 相关
+release_notes.md
+
+.trae/

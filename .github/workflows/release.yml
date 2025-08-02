@@ -193,9 +193,11 @@ jobs:
 
           # 获取自上一个标签以来的提交记录
           if ($previousTag) {
-            $commits = git log --pretty=format:"- %s (%h)" "$previousTag..HEAD" 2>$null
+            $commits = git log --pretty=format:"  
+            - %s (%h)" "$previousTag..HEAD" 2>$null
           } else {
-            $commits = git log --pretty=format:"- %s (%h)" 2>$null
+            $commits = git log --pretty=format:"  
+            - %s (%h)" 2>$null
           }
 
           if (-not $commits) {

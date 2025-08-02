@@ -178,11 +178,38 @@ jobs:
         run: |
           $version = "${{ steps.version.outputs.version }}"
           $date = Get-Date -Format "yyyy年MM月dd日"
+          $tagName = "v$version"
+
+          Write-Host "📋 生成发布日志..."
+          
+          # 获取上一个标签
+          $previousTag = git describe --tags --abbrev=0 --match "v*" HEAD^ 2>$null
+          if (-not $previousTag) {
+            Write-Host "⚠️ 未找到上一个标签，将显示所有提交记录"
+            $previousTag = ""
+          } else {
+            Write-Host "📌 上一个标签: $previousTag"
+          }
+
+          # 获取自上一个标签以来的提交记录
+          if ($previousTag) {
+            $commits = git log --pretty=format:"- %s (%h)" "$previousTag..HEAD" 2>$null
+          } else {
+            $commits = git log --pretty=format:"- %s (%h)" 2>$null
+          }
+
+          if (-not $commits) {
+            $commits = "- 初始版本发布"
+          }
+
+          Write-Host "📝 找到的提交记录:"
+          Write-Host $commits
 
           $releaseNotes = @"
           ## TinyPin $version 发布
 
           **发布日期**: $date
+          **标签**: $tagName
 
           ### 📦 安装包下载
 
@@ -197,7 +224,9 @@ jobs:
 
           ### 📝 更新内容
 
-          此版本包含最新的功能改进和错误修复。
+          自上一个版本以来的更改：
+
+          $commits
 
           ### 🚀 安装说明
 
@@ -207,7 +236,7 @@ jobs:
 
           ---
 
-          **完整更改日志**: https://github.com/${{ github.repository }}/compare/v$version...release
+          **完整更改日志**: https://github.com/${{ github.repository }}/compare/$tagName...${{ github.ref_name }}
           "@
 
           # 将发布说明保存到文件

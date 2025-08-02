@@ -193,16 +193,16 @@ jobs:
 
           # 获取自上一个标签以来的提交记录
           if ($previousTag) {
-            $commitList = git log --pretty=format:"%s (%h)" "$previousTag..HEAD" 2>$null
+            $commits = git log --pretty=format:"- %s (%h)" "$previousTag..HEAD" 2>$null
           } else {
-            $commitList = git log --pretty=format:"%s (%h)" 2>$null
+            $commits = git log --pretty=format:"- %s (%h)" 2>$null
           }
 
-          if (-not $commitList) {
-            $commits = "- 初始版本发布"
+          if (-not $commits) {
+            $commits = "- 初始版本发布\n\n"
           } else {
-            # 将提交记录转换为Markdown列表格式，确保每条记录单独一行
-            $commits = ($commitList -split "\n" | ForEach-Object { "- $_" }) -join "\n"
+            # 确保每条提交记录都有换行符
+            $commits = $commits -join "\n\n"
           }
 
           Write-Host "📝 找到的提交记录:"

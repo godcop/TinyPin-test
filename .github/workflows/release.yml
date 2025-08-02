@@ -182,7 +182,7 @@ jobs:
 
           Write-Host "📋 生成发布日志..."
           
-          # 获取上一个标签
+          # 获取上一个标签.
           $previousTag = git describe --tags --abbrev=0 --match "v*" HEAD^ 2>$null
           if (-not $previousTag) {
             Write-Host "⚠️ 未找到上一个标签，将显示所有提交记录"

@@ -199,7 +199,7 @@ jobs:
           }
 
           if (-not $commits) {
-            $commits = "- 无更新说明."
+            $commits = "- 无更新说明"
           } else {
             # 确保每条提交记录都有换行符
             $commits = $commits -join "

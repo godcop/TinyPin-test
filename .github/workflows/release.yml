@@ -200,6 +200,9 @@ jobs:
 
           if (-not $commits) {
             $commits = "- 初始版本发布\n"
+          } else {
+            # 确保每条提交记录都有换行符
+            $commits = $commits -join "\n"
           }
 
           Write-Host "📝 找到的提交记录:"

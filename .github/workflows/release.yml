@@ -1,15 +1,12 @@
 name: 自动构建和发布
 
-# on:
-#   push:
-#     branches: [ release ]
-#   pull_request:
-#     branches: [ release ]
 on:
   push:
     tags:
       - "v*" # 通配符匹配以 "v" 开头的标签（如 v1.0.0、v2.3.4）
-      # - '*'   # 匹配所有标签（谨慎使用，可能触发过多工作流）
+  # 也可以添加其他触发条件，如果需要
+  # pull_request:
+  #   branches: [ main ]
 
 # 添加必要的权限设置
 permissions:
@@ -218,7 +215,7 @@ jobs:
           echo "notes_file=release_notes.md" >> $env:GITHUB_OUTPUT
 
       - name: 检查 GitHub Release 前置条件
-        if: github.event_name == 'push' && github.ref == 'refs/heads/release'
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
@@ -274,7 +271,7 @@ jobs:
           Write-Host "✅ 所有前置条件检查通过"
 
       - name: 创建 GitHub Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/release'
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
@@ -291,7 +288,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: GitHub Release 创建结果
-        if: always() && (github.event_name == 'push' && github.ref == 'refs/heads/release')
+        if: always() && (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
         shell: pwsh
         run: |
           if ("${{ steps.create_release.outcome }}" -eq "success") {
@@ -341,7 +338,7 @@ jobs:
             Write-Host "  - $($_.Name) ($size MB)"
           }
 
-          if ("${{ github.event_name }}" -eq "push" -and "${{ github.ref }}" -eq "refs/heads/release") {
+          if ("${{ github.event_name }}" -eq "push" -and "${{ startsWith(github.ref, 'refs/tags/') }}") {
             Write-Host ""
             Write-Host "🚀 已自动发布到 GitHub Releases: ${{ steps.version.outputs.tag }}"
             Write-Host "🔗 发布页面: https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.tag }}"

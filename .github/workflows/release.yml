@@ -200,6 +200,8 @@ jobs:
             " 2>$null
           }
 
+          Write-Host git log --pretty
+
           if (-not $commits) {
             $commits = "- 无更新说明1"
           }

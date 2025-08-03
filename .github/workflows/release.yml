@@ -143,32 +143,32 @@ jobs:
           }
 
           $releaseNotes = @"
-## TinyPin $version 发布
-
-**发布日期**: $date
-**标签**: $tagName
-
-### 📦 安装包下载
-
-- **TinyPin-$version-x64-setup.exe** - 适用于 64 位 Windows 系统
-- **TinyPin-$version-Win32-setup.exe** - 适用于 32 位和 64 位 Windows 系统
-- **TinyPin-$version-arm64-setup.exe** - 适用于 ARM64 Windows 系统
-
-### 🔧 系统要求
-
-- Windows 7 SP1 或更高版本
-- 对应的系统架构 (x64/x86/ARM64)
-
-### 📝 更新内容
-
-$commits
-
-### 🚀 安装说明
-
-1. 下载适合您系统架构的安装包
-2. 运行安装程序并按照提示完成安装
-3. 安装完成后可在开始菜单找到 TinyPin
-"@
+          ## TinyPin $version 发布
+          
+          **发布日期**: $date
+          **标签**: $tagName
+          
+          ### 📦 安装包下载
+          
+          - **TinyPin-$version-x64-setup.exe** - 适用于 64 位 Windows 系统
+          - **TinyPin-$version-Win32-setup.exe** - 适用于 32 位和 64 位 Windows 系统
+          - **TinyPin-$version-arm64-setup.exe** - 适用于 ARM64 Windows 系统
+          
+          ### 🔧 系统要求
+          
+          - Windows 7 SP1 或更高版本
+          - 对应的系统架构 (x64/x86/ARM64)
+          
+          ### 📝 更新内容
+          
+          $commits
+          
+          ### 🚀 安装说明
+          
+          1. 下载适合您系统架构的安装包
+          2. 运行安装程序并按照提示完成安装
+          3. 安装完成后可在开始菜单找到 TinyPin
+          "@
 
           $releaseNotes | Out-File -FilePath "release_notes.md" -Encoding UTF8
           echo "notes_file=release_notes.md" >> $env:GITHUB_OUTPUT

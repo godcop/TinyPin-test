@@ -128,6 +128,9 @@ jobs:
           $date = Get-Date -Format "yyyy年MM月dd日"
           $tagName = "v$version"
 
+          # 定义要包含的提交前缀
+          $allowedPrefixes = @("fix:", "feat:", "docs:", "style:", "refactor:", "perf:", "test:", "chore:")
+
           # 获取提交记录
           $previousTag = git describe --tags --abbrev=0 --match "v*" HEAD^ 2>$null
           if ($previousTag) {
@@ -137,7 +140,22 @@ jobs:
           }
 
           if ($commitList) {
-            $commits = ($commitList | ForEach-Object { "- $_" }) -join "`n"
+            # 过滤只包含指定前缀的提交
+            $filteredCommits = $commitList | Where-Object {
+              $commit = $_
+              $allowedPrefixes | ForEach-Object {
+                if ($commit -match "^$_") {
+                  return $true
+                }
+              }
+              return $false
+            }
+            
+            if ($filteredCommits) {
+              $commits = ($filteredCommits | ForEach-Object { "- $_" }) -join "`n"
+            } else {
+              $commits = "- 无更新说明"
+            }
           } else {
             $commits = "- 无更新说明"
           }

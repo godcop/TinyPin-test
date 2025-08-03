@@ -200,9 +200,9 @@ jobs:
 
           if ($commitList) {
             # 将每个提交标题转换为无序列表格式
-            $commits = ($commitList | ForEach-Object { "          - $_" }) -join "`n"
+            $commits = ($commitList | ForEach-Object { "- $_" }) -join "`n"
           } else {
-            $commits = "          - 无更新说明"
+            $commits = "- 无更新说明"
           }
 
           Write-Host "📝 找到的提交记录:"

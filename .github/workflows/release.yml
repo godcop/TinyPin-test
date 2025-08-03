@@ -193,15 +193,16 @@ jobs:
 
           # 获取自上一个标签以来的提交记录
           if ($previousTag) {
-            $commits = git log --pretty=format:"- %s (%h)  
-            " "$previousTag..HEAD" 2>$null
+            $commitList = git log --pretty=format:"%s" "$previousTag..HEAD" 2>$null
           } else {
-            $commits = git log --pretty=format:"- %s (%h)  
-            " 2>$null
+            $commitList = git log --pretty=format:"%s" 2>$null
           }
 
-          if (-not $commits) {
-            $commits = "- 无更新说明1"
+          if ($commitList) {
+            # 将每个提交标题转换为无序列表格式
+            $commits = ($commitList | ForEach-Object { "          - **$_**" }) -join "`n"
+          } else {
+            $commits = "          - **无更新说明**"
           }
 
           Write-Host "📝 找到的提交记录:"

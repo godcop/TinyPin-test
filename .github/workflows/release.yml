@@ -30,14 +30,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: 获取标签名
-      #   id: get_tag
-      #   run: |
-      #     # github.ref 格式为 refs/tags/v1.0.0，提取标签名（v1.0.0）
-      #     TAG_NAME="${{ github.ref_name }}"
-      #     echo "检测到标签：$TAG_NAME"
-      #     echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT  # 输出到后续步骤使用
-
       - name: 设置MSBuild
         uses: microsoft/setup-msbuild@v2
 
@@ -181,7 +173,7 @@ jobs:
           $tagName = "v$version"
 
           Write-Host "📋 生成发布日志..."
-          
+
           # 获取上一个标签
           $previousTag = git describe --tags --abbrev=0 --match "v*" HEAD^ 2>$null
           if (-not $previousTag) {
@@ -235,10 +227,10 @@ jobs:
           2. 运行安装程序并按照提示完成安装
           3. 安装完成后可在开始菜单找到 TinyPin
 
-          ---
+          # ---
 
-          **完整更改日志**: https://github.com/${{ github.repository }}/compare/$tagName...${{ github.ref_name }}
-          "@
+          # **完整更改日志**: https://github.com/${{ github.repository }}/compare/$tagName...${{ github.ref_name }}
+          # "@
 
           # 将发布说明保存到文件
           $releaseNotes | Out-File -FilePath "release_notes.md" -Encoding UTF8

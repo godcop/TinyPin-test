@@ -200,7 +200,7 @@ jobs:
             " 2>$null
           }
 
-          Write-Host git log --pretty
+          Write-Host git log --pretty=format:"- %s (%h)" "$previousTag..HEAD" 2>$null
 
           if (-not $commits) {
             $commits = "- 无更新说明1"
